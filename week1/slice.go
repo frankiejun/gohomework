@@ -32,15 +32,11 @@ func DeleteAt2(s []int, idx int) ([]int, error) {
 	if idx < 0 || idx >= len(s) {
 		return nil, ErrIndexOutOfRange
 	}
-	j := 0
-	for i, val := range s {
-		if i != idx {
-			s[j] = val
-			j++
-		}
+	len := len(s)
+	for i := idx; i < len-1; i++ {
+		s[i] = s[i+1]
 	}
-	s = s[:j]
-	return s, nil
+	return s[:len-1], nil
 }
 
 // 泛型
@@ -48,15 +44,11 @@ func DeleteAt3[T any](s []T, idx int) ([]T, error) {
 	if idx < 0 || idx >= len(s) {
 		return nil, ErrIndexOutOfRange
 	}
-	j := 0
-	for i, val := range s {
-		if i != idx {
-			s[j] = val
-			j++
-		}
+	len := len(s)
+	for i := idx; i < len-1; i++ {
+		s[i] = s[i+1]
 	}
-	s = s[:j]
-	return s, nil
+	return s[:len-1], nil
 
 }
 
@@ -112,6 +104,7 @@ func main() {
 		println("delete data error !")
 		return
 	}
+	fmt.Printf("DeleteAt2:\n")
 	for _, a := range arrint {
 		fmt.Println(a)
 	}
