@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"gitee.com/geekbang/basic-go/webook/internal/repository/cache"
+	"gitee.com/geekbang/basic-go/webook/internal/repository/localcache"
 )
 
 var (
@@ -19,10 +20,10 @@ type CodeRepository interface {
 }
 
 type CachedCodeRepository struct {
-	cache cache.CodeCache
+	cache localcache.CodeCache
 }
 
-func NewCachedCodeRepository(c cache.CodeCache) *CachedCodeRepository {
+func NewCodeRepository(c localcache.CodeCache) CodeRepository {
 	return &CachedCodeRepository{
 		cache: c,
 	}

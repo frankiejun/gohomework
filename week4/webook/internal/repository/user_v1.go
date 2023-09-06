@@ -27,8 +27,8 @@ func NewUserRepositoryV1(dbCfg DBConfig, c CacheConfig) *CachedUserRepository {
 	if err != nil {
 		panic(err)
 	}
-	ud := dao.NewGORMUserDAO(db)
-	uc := cache.NewRedisUserCache(redis.NewClient(&redis.Options{
+	ud := dao.NewUserDAO(db)
+	uc := cache.NewUserCache(redis.NewClient(&redis.Options{
 		Addr: c.Addr,
 	}))
 	return &CachedUserRepository{

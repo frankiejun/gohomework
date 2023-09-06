@@ -36,7 +36,13 @@ type LocalCodeCache struct {
 	interval   int  //定时扫描清理缓存的时间间隔(秒)
 }
 
-func NewLocalCodeCache(timeout, times, expiretime, interval int) *LocalCodeCache {
+// 无参数构造，方便wire构建
+func NewCodeCache() CodeCache {
+	return newLocalCodeCache(60, 3, 600, 1)
+}
+
+// 带参数构造，方便测试
+func newLocalCodeCache(timeout, times, expiretime, interval int) CodeCache {
 	return &LocalCodeCache{
 		lock:       sync.Mutex{},
 		m:          make(map[string]string, 1),

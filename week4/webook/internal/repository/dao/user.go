@@ -26,7 +26,7 @@ type GORMUserDAO struct {
 	db *gorm.DB
 }
 
-func NewGORMUserDAO(db *gorm.DB) *GORMUserDAO {
+func NewUserDAO(db *gorm.DB) UserDAO {
 	return &GORMUserDAO{
 		db: db,
 	}

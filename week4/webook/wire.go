@@ -6,6 +6,7 @@ import (
 	"gitee.com/geekbang/basic-go/webook/internal/repository"
 	"gitee.com/geekbang/basic-go/webook/internal/repository/cache"
 	"gitee.com/geekbang/basic-go/webook/internal/repository/dao"
+	"gitee.com/geekbang/basic-go/webook/internal/repository/localcache"
 	"gitee.com/geekbang/basic-go/webook/internal/service"
 	"gitee.com/geekbang/basic-go/webook/internal/web"
 	"gitee.com/geekbang/basic-go/webook/ioc"
@@ -20,18 +21,20 @@ func InitWebServer() *gin.Engine {
 		ioc.InitRedis, ioc.InitDB,
 
 		// DAO 部分
-		dao.NewGORMUserDAO,
+		dao.NewUserDAO,
 
 		// Cache 部分
-		cache.NewRedisUserCache, cache.NewRedisCodeCache,
+		//cache.NewCodeCache,
+		cache.NewUserCache,
+		localcache.NewCodeCache,
 
 		// repository 部分
-		repository.NewCachedUserRepository,
-		repository.NewCachedCodeRepository,
+		repository.NewUserRepository,
+		repository.NewCodeRepository,
 
 		// service 部分
 		ioc.InitSmsService,
-		service.NewSMSCodeService,
+		service.NewCodeService,
 		service.NewUserService,
 
 		// handler 部分
