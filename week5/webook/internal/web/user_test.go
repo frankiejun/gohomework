@@ -2,6 +2,7 @@ package web
 
 import (
 	"bytes"
+	"gitee.com/geekbang/basic-go/webook/internal/domain"
 	"gitee.com/geekbang/basic-go/webook/internal/service"
 	svcmocks "gitee.com/geekbang/basic-go/webook/internal/service/mocks"
 	"github.com/gin-gonic/gin"
@@ -95,34 +96,59 @@ func TestLoginJWT(t *testing.T) {
 		wantcode int
 		wantBody string
 	}{
+		{ //这个似乎无法测试
+			name: "bind错误",
+			mock: func(ctrl *gomock.Controller) service.UserService {
+				usersvc := svcmocks.NewMockUserService(ctrl)
+				return usersvc
+			},
+			wantcode: http.StatusBadRequest,
+			reqbody:  `{"password":"123@qq.com"`,
+		},
 		{
 			name: "登陆成功",
 			mock: func(ctrl *gomock.Controller) service.UserService {
 				usersvc := svcmocks.NewMockUserService(ctrl)
-				usersvc.EXPECT().Login(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil)
+				usersvc.EXPECT().Login(gomock.Any(), gomock.Any(), gomock.Any()).Return(domain.User{
+					Id: 1,
+				}, nil)
 				return usersvc
 			},
-			reqbody: `{"email":"123@qq.com","password":"1234567!@#"}`,
+			wantcode: http.StatusOK,
+			wantBody: "登录成功",
+			reqbody:  `{"Email":"123@qq.com","password":"1234567!@#"}`,
+		},
+		{
+			name: "用户名或者密码不正确，请重试",
+			mock: func(ctrl *gomock.Controller) service.UserService {
+				usersvc := svcmocks.NewMockUserService(ctrl)
+				usersvc.EXPECT().Login(gomock.Any(), gomock.Any(), gomock.Any()).Return(domain.User{}, service.ErrInvalidUserOrPassword)
+				return usersvc
+			},
+			wantcode: http.StatusOK,
+			wantBody: "用户名或者密码不正确，请重试",
+			reqbody:  `{"email":"123@qq.com","password":"abc!@#"}`,
 		},
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			server := gin.Default()
+
 			ctrl := gomock.NewController(t)
 			defer ctrl.Finish()
-
+			server := gin.Default()
 			h := NewUserHandler(tc.mock(ctrl), nil)
 			h.RegisterRoutes(server)
 
-			req, err := http.NewRequest("POST", "/users/login",
+			req, err := http.NewRequest(http.MethodPost, "/users/login",
 				bytes.NewBuffer([]byte(tc.reqbody)))
 			require.NoError(t, err)
+			//req.Header.Set("Content-Type", "application/json")
 			req.Header.Set("Content-Type", "application/json")
 			resp := httptest.NewRecorder()
 			//t.Log(resp)
 			server.ServeHTTP(resp, req)
 			assert.Equal(t, tc.wantcode, resp.Code)
-			assert.Equal(t, tc.wantBody, resp.Body)
+			assert.Equal(t, tc.wantBody, resp.Body.String())
 		})
 	}
 
