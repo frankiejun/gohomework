@@ -22,7 +22,7 @@ func TestLocalCodeCache_Set(t *testing.T) {
 	}{
 		{
 			name:   "settest",
-			fields: newLocalCodeCache(60, 3, 600, 1),
+			fields: newLocalCodeCache(60, 3, 600, 1).(*LocalCodeCache),
 			args: &args{
 				biz:   "codeCache",
 				phone: "12345678911",
@@ -33,7 +33,7 @@ func TestLocalCodeCache_Set(t *testing.T) {
 
 		{
 			name:   "settest",
-			fields: newLocalCodeCache(60, 3, 600, 1),
+			fields: newLocalCodeCache(60, 3, 600, 1).(*LocalCodeCache),
 			args: &args{
 				biz:   "codeCache",
 				phone: "12345678911",
@@ -43,7 +43,7 @@ func TestLocalCodeCache_Set(t *testing.T) {
 		},
 		{
 			name:   "发送验证码太频繁",
-			fields: newLocalCodeCache(60, 3, 600, 1),
+			fields: newLocalCodeCache(60, 3, 600, 1).(*LocalCodeCache),
 			args: &args{
 				biz:   "codeCache",
 				phone: "12345678912",
@@ -81,7 +81,7 @@ func TestLocalCodeCache_Verify(t *testing.T) {
 	}{
 		{
 			name:   "正常验证",
-			fields: newLocalCodeCache(60, 3, 600, 1),
+			fields: newLocalCodeCache(60, 3, 600, 1).(*LocalCodeCache),
 			args: &args{
 				biz:       "codeCache",
 				phone:     "12345678901",
@@ -92,7 +92,7 @@ func TestLocalCodeCache_Verify(t *testing.T) {
 		},
 		{
 			name:   "验证次数太多",
-			fields: newLocalCodeCache(60, -1, 600, 1),
+			fields: newLocalCodeCache(60, -1, 600, 1).(*LocalCodeCache),
 			args: &args{
 				biz:       "codeCache",
 				phone:     "12345678902",
@@ -103,7 +103,7 @@ func TestLocalCodeCache_Verify(t *testing.T) {
 		},
 		{
 			name:   "缓存过期主动清理",
-			fields: newLocalCodeCache(60, 3, 2, 60),
+			fields: newLocalCodeCache(60, 3, 2, 60).(*LocalCodeCache),
 			args: &args{
 				biz:       "codeCache",
 				phone:     "12345678904",
@@ -114,7 +114,7 @@ func TestLocalCodeCache_Verify(t *testing.T) {
 		},
 		{
 			name:   "验证码不等",
-			fields: newLocalCodeCache(60, 3, 1, 1),
+			fields: newLocalCodeCache(60, 3, 1, 1).(*LocalCodeCache),
 			args: &args{
 				biz:       "codeCache",
 				phone:     "12345678905",
@@ -125,7 +125,7 @@ func TestLocalCodeCache_Verify(t *testing.T) {
 		},
 		{
 			name:   "缓存超时被动清理",
-			fields: newLocalCodeCache(1, 3, 1, 1),
+			fields: newLocalCodeCache(1, 3, 1, 1).(*LocalCodeCache),
 			args: &args{
 				biz:       "codeCache",
 				phone:     "12345678906",
