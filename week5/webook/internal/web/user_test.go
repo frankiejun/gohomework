@@ -96,7 +96,7 @@ func TestLoginJWT(t *testing.T) {
 		wantcode int
 		wantBody string
 	}{
-		{ //这个似乎无法测试
+		{
 			name: "bind错误",
 			mock: func(ctrl *gomock.Controller) service.UserService {
 				usersvc := svcmocks.NewMockUserService(ctrl)
