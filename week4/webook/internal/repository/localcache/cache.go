@@ -138,7 +138,6 @@ func (c *LocalCodeCache) cleanCache(biz, phone string) {
 func (c *LocalCodeCache) cleanup() {
 	for {
 		time.Sleep(time.Duration(c.interval) * time.Second) // 每隔一段时间执行一次清理操作
-
 		func() {
 			c.lock.Lock()
 			defer c.lock.Unlock()

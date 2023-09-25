@@ -144,7 +144,7 @@ func TestLocalCodeCache_Verify(t *testing.T) {
 			} else if tt.name == "验证码不等" {
 				tt.args.inputCode = "111111"
 			} else if tt.name == "缓存超时被动清理" {
-				time.Sleep(time.Second * 2)
+				time.Sleep(time.Second * 3)
 			}
 			got, err := c.Verify(tt.args.ctx, tt.args.biz, tt.args.phone, tt.args.inputCode)
 
