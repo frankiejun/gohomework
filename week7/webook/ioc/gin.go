@@ -59,10 +59,12 @@ func corsHandler() gin.HandlerFunc {
 func logingHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
-		errptr, exists := c.Get("error")
-		if exists && errptr != nil {
-			if err, ok := errptr.(*error); ok {
-				zap.L().Debug("处理请求失败:", zap.Error(*err))
+		anyerr, exists := c.Get("error")
+		if exists && anyerr != nil {
+			if errptr, ok := anyerr.(*error); ok {
+				if *errptr != nil {
+					zap.L().Error("处理请求失败:", zap.Error(*errptr))
+				}
 			}
 		}
 	}
