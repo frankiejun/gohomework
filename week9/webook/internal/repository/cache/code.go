@@ -47,6 +47,7 @@ func (c *RedisCodeCache) Set(ctx context.Context,
 	biz string,
 	phone string,
 	code string) error {
+
 	res, err := c.redis.Eval(ctx, luaSetCode, []string{c.key(biz, phone)}, code).Int()
 	if err != nil {
 		return err

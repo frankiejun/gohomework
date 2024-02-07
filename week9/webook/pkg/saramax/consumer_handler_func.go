@@ -13,6 +13,8 @@ var vector *prometheus.CounterVec
 func InitCounter(opt prometheus.CounterOpts) {
 	vector = prometheus.NewCounterVec(opt, []string{"topic", "partition"})
 	prometheus.MustRegister(vector)
+
+	vector.WithLabelValues("test", "123").Inc()
 }
 
 type Handler[T any] struct {

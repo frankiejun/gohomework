@@ -46,6 +46,7 @@ func TestArticleTopnCacheImpl_Add(t *testing.T) {
 }
 
 func TestArticleTopnCacheImpl_All(t *testing.T) {
+	//redisData 是模拟redis内已有点赞数据，或者说程序上线时把现有数据库数据导入redis的这个过程
 	redisData := []domain.ArticlTopN{
 		domain.ArticlTopN{
 			Id:      1,
@@ -87,6 +88,7 @@ func TestArticleTopnCacheImpl_All(t *testing.T) {
 	}{
 		{
 			name: "添加数据",
+			//每次添加一个数据，改变原来排名。
 			args: args{
 				ctx:   context.Background(),
 				artId: 5,
@@ -110,6 +112,7 @@ func TestArticleTopnCacheImpl_All(t *testing.T) {
 		},
 		{
 			name: "添加数据,改变原有排名",
+			//每次添加一个数据，改变原来排名。
 			args: args{
 				ctx:   context.Background(),
 				artId: 1,
